@@ -1,0 +1,91 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
+
+    signingConfigs {
+        release {
+            keyAlias 'xter'
+            keyPassword 'hhll3131'
+            storeFile file('../xter.jks')
+            storePassword 'hhhhllll'
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.xter.slimnews"
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            //开启混合
+            minifyEnabled true
+//            //开启简单优化
+//            zipAlignEnabled true
+//            // 移除无用的resource文件
+//            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    if (variant.buildType.name.equals('release')) {
+                        outputFileName = "SlimNews_V${defaultConfig.versionName}.apk"
+                    } else if (variant.buildType.name.equals('debug')) {
+                        outputFileName = "SlimNews_V${defaultConfig.versionName}_debug.apk"
+                    }
+                }
+            }
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile rootProject.testJunit
+    androidTestCompile rootProject.testRunner, {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile rootProject.testRules, {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    compile rootProject.appcompat
+    compile rootProject.constraint
+    compile rootProject.supportV4
+    compile rootProject.design
+    compile rootProject.recyclerview
+
+    compile project(':support')
+
+    compile rootProject.butterknife
+    annotationProcessor rootProject.butterknifeprocessor
+    compile rootProject.glide
+    annotationProcessor rootProject.glideprocessor
+    compile rootProject.glidepalette
+
+//    compile rootProject.rxjava2
+//    compile rootProject.rxandroid
+//    compile rootProject.retrofit2
+//    compile rootProject.retrofit2convertergson
+//    compile rootProject.retrofit2adapter
+    compile rootProject.okhttp
+    compile rootProject.okhttp3url
+    compile rootProject.rxpermission
+    compile rootProject.fab
+
+    compile rootProject.stetho
+    compile rootProject.stethookhttp
+}
