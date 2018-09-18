@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.xter.slimnews.R;
-import com.xter.slimnews.data.entity.News;
-import com.xter.slimnews.presenstation.component.adapter.NewsListAdapter;
+import com.xter.slimnews.data.entity.NewsContent;
+import com.xter.slimnews.presenstation.component.adapter.NewsPageListAdapter;
 import com.xter.slimnews.presenstation.gen.INewsListRule;
 import com.xter.slimnews.presenstation.presenter.NewsListPresenter;
 import com.xter.slimnews.presenstation.util.InjectUtil;
@@ -50,7 +50,7 @@ public class NewsFragment extends BaseFragment implements INewsListRule.V {
 	@BindView(R.id.rv_news_abstract)
 	RecyclerView rvNewsList;
 
-	NewsListAdapter newsListAdapter;
+	NewsPageListAdapter newsPageListAdapter;
 
 	private INewsListRule.P newsPresenter;
 
@@ -62,29 +62,29 @@ public class NewsFragment extends BaseFragment implements INewsListRule.V {
 
 	@Override
 	public void initData(Bundle savedInstanceState) {
-		String channel = Preconditions.checkNotNull(getArguments()).getString(CHANNEL);
-		if (!TextUtils.isEmpty(channel)) {
-			newsPresenter.loadNews(channel, 0, 10);
+		String channelId = Preconditions.checkNotNull(getArguments()).getString(CHANNEL);
+		if (!TextUtils.isEmpty(channelId)) {
+			newsPresenter.loadNewsContent(channelId, 1);
 		}
 
-		newsListAdapter = new NewsListAdapter(getActivity(), R.layout.item_news_abstract, null);
+		newsPageListAdapter = new NewsPageListAdapter(getActivity(), R.layout.item_news_abstract, null);
 		rvNewsList.setLayoutManager(new LinearLayoutManager(getActivity()));
 		rvNewsList.addItemDecoration(new QuickItemDecoration(getActivity(), QuickItemDecoration.VERTICAL_LIST));
-		rvNewsList.setAdapter(newsListAdapter);
+		rvNewsList.setAdapter(newsPageListAdapter);
 
 		srlNews.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				newsPresenter.loadMoreNews(10);
+				newsPresenter.loadMoreNews();
 			}
 		});
 
-		newsListAdapter.setOnItemClickLitener(new QuickRecycleAdapter.OnItemClickLitener() {
+		newsPageListAdapter.setOnItemClickLitener(new QuickRecycleAdapter.OnItemClickLitener() {
 			@Override
 			public void onItemClick(View view, int position) {
-				showDetail(newsListAdapter.getItem(position));
-				newsListAdapter.getItem(position).isRead = true;
-				newsListAdapter.notifyDataSetChanged();
+				showDetail(newsPageListAdapter.getItem(position));
+				newsPageListAdapter.getItem(position).isRead = true;
+				newsPageListAdapter.notifyDataSetChanged();
 			}
 
 			@Override
@@ -94,15 +94,15 @@ public class NewsFragment extends BaseFragment implements INewsListRule.V {
 		});
 	}
 
-	private void showDetail(News news) {
-		NewsDetailFragment newsDetailFragment = NewsDetailFragment.newInstance(news.url);
-		ActivityUtil.showFragment(getFragmentManager(), R.id.fl_content, newsDetailFragment, news.title);
+	private void showDetail(NewsContent newsContent) {
+		NewsDetailFragment newsDetailFragment = NewsDetailFragment.newInstance(newsContent.link);
+		ActivityUtil.showFragment(getFragmentManager(), R.id.fl_content, newsDetailFragment, newsContent.title);
 	}
 
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
-		newsPresenter = new NewsListPresenter(InjectUtil.getNewsListUseCase());
+		newsPresenter = new NewsListPresenter(InjectUtil.getNewsPageUseCase());
 	}
 
 	@Override
@@ -111,8 +111,8 @@ public class NewsFragment extends BaseFragment implements INewsListRule.V {
 	}
 
 	@Override
-	public void loadNews(List<News> newsList) {
-		newsListAdapter.addAllFirst(newsList);
+	public void loadNewsContent(List<NewsContent> newsContentList) {
+		newsPageListAdapter.addAllFirst(newsContentList);
 	}
 
 	@Override

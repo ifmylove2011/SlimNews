@@ -2,7 +2,10 @@ package com.xter.slimnews.data.source;
 
 import com.xter.slimnews.data.entity.JiSuResponse;
 import com.xter.slimnews.data.entity.News;
+import com.xter.slimnews.data.entity.NewsChannelBean;
+import com.xter.slimnews.data.entity.NewsPageBean;
 import com.xter.slimnews.data.entity.NewsResponse;
+import com.xter.slimnews.data.entity.ShowReponse;
 
 import java.util.List;
 import java.util.Map;
@@ -30,5 +33,13 @@ public class NewsAPI {
 
 	public Observable<JiSuResponse<NewsResponse>> getNewsChannel(Map<String,Object> params){
 		return NewsHttp.build().getNewsAPI().getNewsList(params);
+	}
+
+	public Observable<ShowReponse<NewsChannelBean>> getNewsChannelPage(Map<String,Object> params){
+		return ShowHttp.build().getShowAPI().getNewsChannelBean(params);
+	}
+
+	public Observable<ShowReponse<NewsPageBean>> getNewsPage(Map<String,Object> params){
+		return ShowHttp.build().getShowAPI().getNewsBean(params);
 	}
 }

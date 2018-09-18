@@ -87,11 +87,6 @@ public class MainActivity extends BaseActivity
 
 	}
 
-	private void showFragment(String channel) {
-//		NewsFragment newsFragment = NewsFragment.newInstance(channel);
-//		ActivityUtil.showFragment(getSupportFragmentManager(), R.id.fl_content, newsFragment, channel);
-	}
-
 	@Override
 	protected void initData() {
 		newsChannelAdatper = new NewsChannelAdatper(this, R.layout.item_news_channel, null);
@@ -123,7 +118,7 @@ public class MainActivity extends BaseActivity
 
 	@Override
 	protected BasePresenter genPresenter() {
-		mainPresenter = new MainPresenter(InjectUtil.getNewsChannelUseCase());
+		mainPresenter = new MainPresenter(InjectUtil.getNewsChannelPageUseCase());
 		return (BasePresenter) mainPresenter;
 	}
 
@@ -182,7 +177,7 @@ public class MainActivity extends BaseActivity
 	}
 
 	@Override
-	public void loadNewsChannel(List<String> channels) {
+	public void loadNewsChannel(List<NewsChannel> channels) {
 		if (newsFragmentAdapter == null) {
 			newsFragmentAdapter = new NewsFragmentAdapter(getSupportFragmentManager(), channels);
 			vpNews.setAdapter(newsFragmentAdapter);

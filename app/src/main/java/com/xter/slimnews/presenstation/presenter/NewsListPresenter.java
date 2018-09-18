@@ -1,10 +1,8 @@
 package com.xter.slimnews.presenstation.presenter;
 
-import com.xter.slimnews.data.constant.NC;
-import com.xter.slimnews.data.db.DBM;
-import com.xter.slimnews.data.entity.JiSuResponse;
-import com.xter.slimnews.data.entity.NewsResponse;
-import com.xter.slimnews.domain.NewsListUseCase;
+import com.xter.slimnews.data.entity.NewsPageBean;
+import com.xter.slimnews.data.entity.ShowReponse;
+import com.xter.slimnews.domain.NewsPageUseCase;
 import com.xter.slimnews.presenstation.gen.INewsListRule;
 import com.xter.support.gen.BasePresenter;
 import com.xter.support.util.L;
@@ -18,51 +16,54 @@ import io.reactivex.observers.DisposableObserver;
 
 public class NewsListPresenter extends BasePresenter<INewsListRule.V> implements INewsListRule.P {
 
-	private final NewsListUseCase newsListUseCase;
-	private int length;
-	private String channel;
+	private final NewsPageUseCase newsPageUseCase;
+	private NewsPageUseCase.Request request;
 
-	public NewsListPresenter(NewsListUseCase newsListUseCase) {
-		this.newsListUseCase = newsListUseCase;
+	public NewsListPresenter(NewsPageUseCase newsPageUseCase) {
+		this.newsPageUseCase = newsPageUseCase;
+		request = new NewsPageUseCase.Request();
 	}
 
 	@Override
-	public void loadNews(String channel, int start, int num) {
-		this.channel = channel;
-		newsListUseCase.execute(new NewsListObserver(), new NewsListUseCase.Request(channel, start, num));
+	public void loadNewsContent(String channelId, int page) {
+		request.channelId = channelId;
+		request.page = String.valueOf(page);
+		newsPageUseCase.execute(new NewsPageObserver(), request);
 	}
 
 	@Override
-	public void loadMoreNews(int num) {
-		newsListUseCase.execute(new NewsListObserver(), new NewsListUseCase.Request(channel, length, num));
+	public void loadMoreNews() {
+		request.page = String.valueOf(Integer.parseInt(request.page) + 1);
+		newsPageUseCase.execute(new NewsPageObserver(), request);
 	}
 
 	@Override
 	public void detach() {
-		newsListUseCase.dispose();
+		newsPageUseCase.dispose();
 	}
 
-	public final class NewsListObserver extends DisposableObserver<JiSuResponse<NewsResponse>> {
+	public final class NewsPageObserver extends DisposableObserver<ShowReponse<NewsPageBean>> {
 
 		@Override
-		public void onNext(JiSuResponse<NewsResponse> newsResponseJiSuResponse) {
-			if (NC.STATUS_OK.equals(newsResponseJiSuResponse.status)) {
-				getView().loadNews(newsResponseJiSuResponse.result.news);
-				length += newsResponseJiSuResponse.result.news.size();
-				DBM.getDefaultOrm().save(newsResponseJiSuResponse.result);
+		public void onNext(ShowReponse<NewsPageBean> newsPageBeanShowReponse) {
+			if (newsPageBeanShowReponse.resCode == 0) {
+				getView().loadNewsContent(newsPageBeanShowReponse.resBody.newsPage.newsContentList);
+			} else {
+				L.w(newsPageBeanShowReponse.resError);
 			}
 		}
 
 		@Override
 		public void onError(Throwable e) {
-			e.printStackTrace();
 			getView().hideLoading();
+			e.printStackTrace();
 		}
 
 		@Override
 		public void onComplete() {
 			getView().hideLoading();
-			L.i("加载成功");
+			L.i("加载资讯完成");
 		}
 	}
+
 }

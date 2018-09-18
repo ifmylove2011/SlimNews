@@ -4,33 +4,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:minHeight="@dimen/space_40"
-    android:layout_height="@dimen/space_90"
-    android:maxHeight="@dimen/space_120"
+    android:layout_height="wrap_content"
+    android:adjustViewBounds="true"
+    android:maxHeight="@dimen/space_200"
+    android:minHeight="@dimen/space_60"
 >
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginStart="4dp" android:gravity="top|start"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
         android:text="@string/app_name"
         android:textSize="@dimen/text_18"
-        app:layout_constraintBottom_toTopOf="@+id/tv_info"
+        app:layout_constraintBottom_toTopOf="@+id/ll_image_url"
         app:layout_constraintEnd_toStartOf="@+id/iv_image"
         app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"/>
     <ImageView
         android:id="@+id/iv_image"
         android:layout_width="@dimen/space_100"
         android:layout_height="@dimen/space_80"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginTop="4dp"
         android:contentDescription="@string/app_name"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-    />
+        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"/>
     <TextView
         android:id="@+id/tv_info"
         android:layout_width="0dp"
@@ -43,4 +45,39 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/iv_image"
         app:layout_constraintStart_toStartOf="parent"/>
+    <LinearLayout
+        android:id="@+id/ll_image_url"
+        android:layout_width="0dp"
+        android:layout_height="90dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/tv_info" app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_image_1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/space_4"
+            android:layout_weight="1"
+            android:contentDescription="@string/app_name"/>
+        <ImageView
+            android:id="@+id/iv_image_2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/space_4"
+            android:layout_weight="1"
+            android:contentDescription="@string/app_name"/>
+        <ImageView
+            android:id="@+id/iv_image_3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/space_4"
+            android:layout_weight="1"
+            android:contentDescription="@string/app_name"/>
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

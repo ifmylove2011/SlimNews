@@ -44,4 +44,18 @@ public class News extends BaseModelAuto {
 		this.url = url;
 		this.weburl = weburl;
 	}
+
+	@Override
+	public String toString() {
+		return "News{" +
+				"title='" + title + '\'' +
+				", time='" + time + '\'' +
+				", src='" + src + '\'' +
+				", category='" + category + '\'' +
+				", pic='" + pic + '\'' +
+				", content='" + content + '\'' +
+				", url='" + url + '\'' +
+				", weburl='" + weburl + '\'' +
+				'}';
+	}
 }

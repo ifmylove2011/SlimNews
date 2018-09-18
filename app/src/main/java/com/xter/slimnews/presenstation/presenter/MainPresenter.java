@@ -1,16 +1,16 @@
 package com.xter.slimnews.presenstation.presenter;
 
-import android.Manifest;
 import android.app.Activity;
 
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.xter.slimnews.data.constant.LC;
 import com.xter.slimnews.data.constant.NC;
-import com.xter.slimnews.data.db.SPM;
-import com.xter.slimnews.data.entity.JiSuResponse;
-import com.xter.slimnews.domain.NewsChannelUseCase;
-import com.xter.slimnews.presenstation.component.app.SlimApp;
+import com.xter.slimnews.data.db.DBM;
+import com.xter.slimnews.data.db.NewsDao;
+import com.xter.slimnews.data.entity.NewsChannel;
+import com.xter.slimnews.data.entity.NewsChannelBean;
+import com.xter.slimnews.data.entity.ShowReponse;
+import com.xter.slimnews.domain.NewsChannelPageUseCase;
 import com.xter.slimnews.presenstation.gen.IMainRule;
 import com.xter.support.gen.BasePresenter;
 import com.xter.support.util.L;
@@ -27,9 +27,9 @@ import io.reactivex.observers.DisposableObserver;
 
 public class MainPresenter extends BasePresenter<IMainRule.V> implements IMainRule.P {
 
-	private final NewsChannelUseCase newsChannelUseCase;
+	private final NewsChannelPageUseCase newsChannelUseCase;
 
-	public MainPresenter(NewsChannelUseCase newsChannelUseCase) {
+	public MainPresenter(NewsChannelPageUseCase newsChannelUseCase) {
 		this.newsChannelUseCase = newsChannelUseCase;
 	}
 
@@ -65,11 +65,11 @@ public class MainPresenter extends BasePresenter<IMainRule.V> implements IMainRu
 
 	@Override
 	public void loadNewsChannel() {
-		List<String> channels = SPM.getStringArray(SlimApp.getContext(), LC.SHARED_CONSTANT, LC.TABLE_NEWS_CHANNEL);
+		List<NewsChannel> channels = NewsDao.getNewsChannel();
 		if (channels != null && channels.size() > 0) {
 			getView().loadNewsChannel(channels);
 		} else {
-			newsChannelUseCase.execute(new NewsChannelObserver(), NC.JISU_API_APPKEY);
+			newsChannelUseCase.execute(new NewsChannelPageObserver(), null);
 		}
 	}
 
@@ -78,14 +78,16 @@ public class MainPresenter extends BasePresenter<IMainRule.V> implements IMainRu
 		newsChannelUseCase.dispose();
 	}
 
-	private final class NewsChannelObserver extends DisposableObserver<JiSuResponse<List<String>>> {
+
+	public final class NewsChannelPageObserver extends DisposableObserver<ShowReponse<NewsChannelBean>>{
 
 		@Override
-		public void onNext(JiSuResponse<List<String>> listJiSuResponse) {
-			L.i(listJiSuResponse.toString());
-			if (NC.STATUS_OK.equals(listJiSuResponse.status)) {
-				getView().loadNewsChannel(listJiSuResponse.result);
-				SPM.saveStringArray(SlimApp.getContext(), LC.SHARED_CONSTANT, LC.TABLE_NEWS_CHANNEL, listJiSuResponse.result);
+		public void onNext(ShowReponse<NewsChannelBean> newsChannelBeanShowReponse) {
+			if(NC.RES_CODE_OK == newsChannelBeanShowReponse.resCode){
+				getView().loadNewsChannel(newsChannelBeanShowReponse.resBody.channelList);
+				DBM.getDefaultOrm().save(newsChannelBeanShowReponse.resBody.channelList);
+			}else{
+				L.w(newsChannelBeanShowReponse.resError);
 			}
 		}
 
@@ -96,7 +98,7 @@ public class MainPresenter extends BasePresenter<IMainRule.V> implements IMainRu
 
 		@Override
 		public void onComplete() {
-			L.i("频道完成");
+			L.i("加载频道完成");
 		}
 	}
 }

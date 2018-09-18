@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.xter.slimnews.data.entity.NewsChannel;
 import com.xter.slimnews.presenstation.component.fragment.NewsFragment;
 import com.xter.support.util.L;
 
@@ -17,10 +18,10 @@ import java.util.Map;
  */
 
 public class NewsFragmentAdapter extends FragmentPagerAdapter {
-	private List<String> channels;
+	private List<NewsChannel> channels;
 	private Map<String, NewsFragment> fragmentMap;
 
-	public NewsFragmentAdapter(FragmentManager fm, List<String> channels) {
+	public NewsFragmentAdapter(FragmentManager fm, List<NewsChannel> channels) {
 		super(fm);
 		this.channels = channels;
 		fragmentMap = new HashMap<>(channels.size());
@@ -28,14 +29,14 @@ public class NewsFragmentAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int position) {
-		String channel = channels.get(position);
-		L.i(channel);
+		NewsChannel newsChannel = channels.get(position);
+		L.i(newsChannel.toString());
 		NewsFragment fragment;
-		if (fragmentMap.containsKey(channel)) {
-			fragment = fragmentMap.get(channel);
+		if (fragmentMap.containsKey(newsChannel.channelId)) {
+			fragment = fragmentMap.get(newsChannel.channelId);
 		} else {
-			fragment = NewsFragment.newInstance(channel);
-			fragmentMap.put(channel, fragment);
+			fragment = NewsFragment.newInstance(newsChannel.channelId);
+			fragmentMap.put(newsChannel.channelId, fragment);
 		}
 		return fragment;
 	}
