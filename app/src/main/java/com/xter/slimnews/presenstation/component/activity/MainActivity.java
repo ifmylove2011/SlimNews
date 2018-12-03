@@ -1,8 +1,6 @@
 package com.xter.slimnews.presenstation.component.activity;
 
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -10,33 +8,27 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import com.xter.slimnews.R;
-import com.xter.slimnews.data.constant.LC;
-import com.xter.slimnews.data.db.SPM;
 import com.xter.slimnews.data.entity.NewsChannel;
 import com.xter.slimnews.presenstation.component.adapter.NewsChannelAdatper;
 import com.xter.slimnews.presenstation.component.adapter.NewsFragmentAdapter;
-import com.xter.slimnews.presenstation.component.fragment.NewsFragment;
 import com.xter.slimnews.presenstation.gen.IMainRule;
 import com.xter.slimnews.presenstation.presenter.MainPresenter;
 import com.xter.slimnews.presenstation.util.InjectUtil;
 import com.xter.support.adapter.QuickRecycleAdapter;
 import com.xter.support.component.BaseActivity;
 import com.xter.support.gen.BasePresenter;
-import com.xter.support.util.ActivityUtil;
 import com.xter.support.util.L;
+import com.xter.support.util.RxBus;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.functions.Consumer;
 
 import static android.support.v7.widget.LinearLayoutManager.HORIZONTAL;
 
@@ -114,6 +106,7 @@ public class MainActivity extends BaseActivity
 				rvNewsChannel.smoothScrollToPosition(position);
 			}
 		});
+
 	}
 
 	@Override
@@ -185,6 +178,4 @@ public class MainActivity extends BaseActivity
 
 		newsChannelAdatper.replaceAll(channels);
 	}
-
-
 }

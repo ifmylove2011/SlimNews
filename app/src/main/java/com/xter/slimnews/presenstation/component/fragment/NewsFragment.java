@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.xter.slimnews.R;
+import com.xter.slimnews.data.entity.NewsChannel;
 import com.xter.slimnews.data.entity.NewsContent;
 import com.xter.slimnews.presenstation.component.adapter.NewsPageListAdapter;
 import com.xter.slimnews.presenstation.gen.INewsListRule;
@@ -22,10 +23,12 @@ import com.xter.support.component.BaseFragment;
 import com.xter.support.gen.BasePresenter;
 import com.xter.support.util.ActivityUtil;
 import com.xter.support.util.Preconditions;
+import com.xter.support.util.RxBus;
 
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by XTER on 2018/9/10.
@@ -36,9 +39,9 @@ public class NewsFragment extends BaseFragment implements INewsListRule.V {
 
 	private static final String CHANNEL = "channel";
 
-	public static NewsFragment newInstance(String channel) {
+	public static NewsFragment newInstance(NewsChannel channel) {
 		Bundle args = new Bundle();
-		args.putString(CHANNEL, channel);
+		args.putSerializable(CHANNEL, channel);
 		NewsFragment fragment = new NewsFragment();
 		fragment.setArguments(args);
 		return fragment;
@@ -62,10 +65,13 @@ public class NewsFragment extends BaseFragment implements INewsListRule.V {
 
 	@Override
 	public void initData(Bundle savedInstanceState) {
-		String channelId = Preconditions.checkNotNull(getArguments()).getString(CHANNEL);
-		if (!TextUtils.isEmpty(channelId)) {
-			newsPresenter.loadNewsContent(channelId, 1);
+		NewsChannel channel = (NewsChannel) Preconditions.checkNotNull(getArguments()).getSerializable(CHANNEL);
+		if (!TextUtils.isEmpty(channel.channelId)) {
+			newsPresenter.loadNewsContent(channel.channelId, 1);
 		}
+
+		channel.channelId = "111111111";
+		RxBus.getDefault().post(channel);
 
 		newsPageListAdapter = new NewsPageListAdapter(getActivity(), R.layout.item_news_abstract, null);
 		rvNewsList.setLayoutManager(new LinearLayoutManager(getActivity()));

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.xter.slimnews.presenstation.component.activity.DemoActivity">
+
+    <com.xter.slimnews.presenstation.component.widget.CircleSplash
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_280"
+        app:degree_range="20"
+        app:radius_in="@dimen/space_100"
+        app:radius_out="@dimen/space_120"
+        app:radius_width="@dimen/space_5"/>
+
+    <com.xter.slimnews.presenstation.component.widget.RectSplash
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_400"
+        app:direction="ccw"
+        app:height_in="@dimen/space_200"
+        app:height_out="@dimen/space_240"
+        app:splash_length="120"
+        app:splash_step="20.0"
+        app:splash_width="5"
+        app:width_in="@dimen/space_200"
+        app:width_out="@dimen/space_240"
+    />
+
+</LinearLayout>

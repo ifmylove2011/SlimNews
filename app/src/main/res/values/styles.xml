@@ -14,4 +14,24 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+    <declare-styleable name="CircleSplash">
+        <attr name="radius_in" format="dimension|reference"/>
+        <attr name="radius_out" format="dimension|reference"/>
+        <attr name="radius_width" format="dimension|reference"/>
+        <attr name="degree_range" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="RectSplash">
+        <attr name="width_in" format="dimension|reference"/>
+        <attr name="width_out" format="dimension|reference"/>
+        <attr name="height_in" format="dimension|reference"/>
+        <attr name="direction" format="enum">
+            <enum name="cw" value="0"/>
+            <enum name="ccw" value="1"/>
+        </attr>
+        <attr name="height_out" format="dimension|reference"/>
+        <attr name="splash_length" format="integer"/>
+        <attr name="splash_width" format="integer"/>
+        <attr name="splash_step" format="float"/>
+    </declare-styleable>
 </resources>

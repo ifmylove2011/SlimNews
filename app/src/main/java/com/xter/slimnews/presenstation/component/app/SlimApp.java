@@ -1,5 +1,7 @@
 package com.xter.slimnews.presenstation.component.app;
 
+import android.content.Intent;
+
 import com.facebook.stetho.Stetho;
 import com.xter.support.component.BaseApp;
 import com.xter.support.util.L;
@@ -15,5 +17,7 @@ public class SlimApp extends BaseApp {
 		L.DEBUG = true;
 
 		Stetho.initializeWithDefaults(this);
+
+
 	}
 }
